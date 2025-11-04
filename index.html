@@ -1,75 +1,306 @@
-<!doctype html>
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>مركز الحبيب للألحان والدراسات القبطية</title>
+<style>
+/* 🎨 ألوان المركز: ذهبي - أحمر - كحلي */
+body {
+  font-family: "Cairo", sans-serif;
+  background: #fdf8f2;
+  margin: 0;
+  padding: 0;
+  text-align: center;
+  direction: rtl;
+}
+header {
+  background: linear-gradient(90deg, #800000, #002147);
+  color: white;
+  padding: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 15px;
+}
+header img {
+  height: 80px;
+}
+h1 {
+  margin: 0;
+  font-size: 22px;
+}
+section {
+  display: none;
+  padding: 20px;
+}
+.active {
+  display: block;
+}
+button {
+  background-color: #d4af37;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 8px;
+  color: #002147;
+  font-weight: bold;
+  cursor: pointer;
+  margin: 5px;
+  transition: 0.3s;
+}
+button:hover {
+  background-color: #c19b2b;
+}
+input, select {
+  padding: 8px;
+  margin: 6px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  width: 250px;
+  text-align: center;
+}
+.container {
+  max-width: 600px;
+  margin: auto;
+  background: #fff;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+  border-radius: 15px;
+  padding: 20px;
+}
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+}
+th, td {
+  border: 1px solid #ccc;
+  padding: 8px;
+}
+th {
+  background-color: #002147;
+  color: white;
+}
+footer {
+  background: #002147;
+  color: white;
+  padding: 10px;
+  font-size: 14px;
+  margin-top: 30px;
+}
+</style>
+</head>
 
+<body>
+<header>
+  <img src="logo.png" alt="شعار المركز" />
+  <h1>مركز الحبيب للألحان والدراسات القبطية</h1>
+</header>
 
-<div class="panel">
-<h3>النتائج (تجريبي)</h3>
-<p class="small">عرض نتائجك الشخصية—يمكن ربط الاستعلام من الشيت لاحقًا</p>
-<button class="btn" id="btn-view-results">عرض النتيجة</button>
-</div>
-</div>
+<!-- 🔹 واجهة تسجيل الدخول -->
+<section id="login" class="active">
+  <div class="container">
+    <h2>تسجيل الدخول</h2>
+    <button onclick="showStudentLogin()">دخول كدارس 🎓</button>
+    <button onclick="showTeacherLogin()">دخول كخادم 🙌</button>
+    <div id="student-login" style="display:none;">
+      <input type="text" id="studentCode" placeholder="أدخل كود الدارس" />
+      <button onclick="studentLogin()">تأكيد الدخول</button>
+    </div>
+    <div id="teacher-login" style="display:none;">
+      <input type="password" id="teacherPass" placeholder="كلمة مرور الخادم" />
+      <button onclick="teacherLogin()">تأكيد الدخول</button>
+    </div>
+  </div>
 </section>
 
-
-<section id="teacher-dashboard" class="card dashboard" style="display:none">
-<div class="dash-header">
-<h2>لوحة الخادم</h2>
-<div>
-<button class="btn" id="btn-teacher-logout">تسجيل الخروج</button>
-</div>
-</div>
-
-
-<div class="grid-3">
-<div class="panel">
-<h3>تسجيل دارس جديد</h3>
-<input id="new-name" type="text" placeholder="اسم الدارس" />
-<input id="new-code" type="text" placeholder="كود الدارس (فريد)" />
-<input id="new-class" type="text" placeholder="الفصل / المرحلة (اختياري)" />
-<div class="row">
-<button class="btn primary" id="btn-add-student">تسجيل دارس</button>
-</div>
-<div id="add-student-msg" class="small muted"></div>
-</div>
-
-
-<div class="panel">
-<h3>تسجيل الغياب</h3>
-<p class="small">فتح محرر الغياب لغاية 10 أسابيع</p>
-<div class="row">
-<button class="btn" id="btn-open-attendance">تسجيل الغياب</button>
-</div>
-<div id="attendance-area"></div>
-</div>
-
-
-<div class="panel">
-<h3>تسجيل الدرجات</h3>
-<label>المادة</label>
-<select id="grade-subject">
-<option value="liturgy">الطقوس الكنسية</option>
-<option value="coptic">اللغة القبطية</option>
-<option value="hymns">التسميع الأسبوعي</option>
-<option value="memorization">المحفوظات والأجبية</option>
-</select>
-<div class="row">
-<button class="btn" id="btn-open-grades">تسجيل الدرجات</button>
-</div>
-<div id="grades-area"></div>
-</div>
-</div>
-
-
-<div id="teacher-msg" class="small muted"></div>
+<!-- 🔹 لوحة الدارس -->
+<section id="studentPanel">
+  <div class="container">
+    <h2>لوحة الدارس</h2>
+    <p id="studentName"></p>
+    <button onclick="uploadAssignment('الطقوس')">رفع واجب الطقوس</button>
+    <button onclick="uploadAssignment('القبطية')">رفع واجب القبطية</button>
+    <button onclick="logout()">🚪 تسجيل الخروج</button>
+  </div>
 </section>
 
+<!-- 🔹 لوحة الخادم -->
+<section id="teacherPanel">
+  <div class="container">
+    <h2>لوحة الخادم</h2>
+    <button onclick="registerNewStudent()">➕ تسجيل دارس جديد</button>
+    <button onclick="recordStudentAttendance()">🗓️ تسجيل الغياب</button>
+    <button onclick="recordGrades('الطقوس')">📘 درجات الطقوس</button>
+    <button onclick="recordGrades('القبطية')">📙 درجات القبطية</button>
+    <button onclick="logout()">🚪 تسجيل الخروج</button>
+    <div id="contentArea"></div>
+  </div>
+</section>
 
-<footer class="card small muted center">
-<div>مربوط بـ Google Apps Script (API)</div>
-</footer>
-</main>
-</div>
+<footer>© مركز الحبيب للألحان والدراسات القبطية - جميع الحقوق محفوظة</footer>
 
+<script>
+/* ===========================
+   🧩 كود الموقع التفاعلي الكامل
+   =========================== */
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxhoX_QTwmzq7xVThH13IoUxe4WKX0U5aK8Wptc513Ohh94uUToSyfWNj32mve_A5Yi/exec";
 
-<script src="script.js"></script>
+// 🌟 نظام العرض
+function showSection(id) {
+  document.querySelectorAll("section").forEach(s => s.classList.remove("active"));
+  document.getElementById(id).classList.add("active");
+}
+function showStudentLogin() {
+  document.getElementById("student-login").style.display = "block";
+  document.getElementById("teacher-login").style.display = "none";
+}
+function showTeacherLogin() {
+  document.getElementById("teacher-login").style.display = "block";
+  document.getElementById("student-login").style.display = "none";
+}
+
+// 🎓 تسجيل دخول الدارس
+function studentLogin() {
+  const code = document.getElementById("studentCode").value.trim();
+  if (!code) return alert("يرجى إدخال كود الدارس");
+  sessionStorage.setItem("studentCode", code);
+  document.getElementById("studentName").innerText = "كودك: " + code;
+  showSection("studentPanel");
+}
+
+// 🙌 تسجيل دخول الخادم
+function teacherLogin() {
+  const pass = document.getElementById("teacherPass").value.trim();
+  if (pass === "987654") {
+    showSection("teacherPanel");
+  } else {
+    alert("كلمة المرور غير صحيحة");
+  }
+}
+
+// 🚪 تسجيل الخروج
+function logout() {
+  sessionStorage.clear();
+  showSection("login");
+}
+
+/* ======================================================
+   1️⃣ رفع واجب الدارس
+====================================================== */
+function uploadAssignment(subject) {
+  const studentCode = sessionStorage.getItem("studentCode");
+  if (!studentCode) return alert("يرجى تسجيل الدخول أولاً");
+  const input = document.createElement("input");
+  input.type = "file";
+  input.accept = ".pdf,.jpg,.jpeg,.png";
+  input.onchange = (e) => {
+    const file = e.target.files[0];
+    const reader = new FileReader();
+    reader.onload = function() {
+      const base64 = reader.result;
+      const assignment = {
+        action: "uploadAssignment",
+        assignment: {
+          code: studentCode,
+          subject: subject,
+          fileName: file.name,
+          fileData: base64,
+          mimeType: file.type
+        }
+      };
+      fetch(SCRIPT_URL, {
+        method: "POST",
+        body: JSON.stringify(assignment)
+      })
+      .then(res => res.text())
+      .then(msg => alert(msg))
+      .catch(err => alert("حدث خطأ: " + err));
+    };
+    reader.readAsDataURL(file);
+  };
+  input.click();
+}
+
+/* ======================================================
+   2️⃣ تسجيل الدرجات
+====================================================== */
+function recordGrades(subject) {
+  const content = document.getElementById("contentArea");
+  content.innerHTML = `<h3>تسجيل درجات مادة: ${subject}</h3>
+  <input type='text' id='stCode' placeholder='كود الدارس'>
+  <input type='number' id='gradeVal' min='0' max='10' placeholder='الدرجة'>
+  <input type='number' id='weekNum' min='1' max='15' placeholder='الأسبوع'>
+  <button onclick='saveGrade("${subject}")'>💾 حفظ</button>`;
+}
+function saveGrade(subject) {
+  const code = document.getElementById("stCode").value.trim();
+  const grade = document.getElementById("gradeVal").value;
+  const week = document.getElementById("weekNum").value;
+  if (!code || !grade || !week) return alert("أدخل جميع البيانات");
+  fetch(SCRIPT_URL, {
+    method: "POST",
+    body: JSON.stringify({
+      action: "saveGrades",
+      gradeList: [{ code, subject, week, grade }]
+    })
+  })
+  .then(res => res.text())
+  .then(msg => alert(msg))
+  .catch(err => alert("حدث خطأ: " + err));
+}
+
+/* ======================================================
+   3️⃣ تسجيل الغياب
+====================================================== */
+function recordStudentAttendance() {
+  const content = document.getElementById("contentArea");
+  content.innerHTML = `
+    <h3>تسجيل الغياب</h3>
+    <input type="text" id="attCode" placeholder="كود الدارس">
+    <select id="attWeek">
+      ${Array.from({ length: 10 }, (_, i) => `<option value="${i+1}">أسبوع ${i+1}</option>`).join("")}
+    </select>
+    <select id="attStatus">
+      <option value="true">حاضر</option>
+      <option value="false">غائب</option>
+    </select>
+    <button onclick="saveAttendance()">💾 حفظ</button>`;
+}
+function saveAttendance() {
+  const code = document.getElementById("attCode").value.trim();
+  const week = parseInt(document.getElementById("attWeek").value) - 1;
+  const status = document.getElementById("attStatus").value === "true";
+  if (!code) return alert("أدخل كود الدارس");
+  fetch(SCRIPT_URL, {
+    method: "POST",
+    body: JSON.stringify({
+      action: "saveAttendance",
+      attendanceList: [{ code, attendance: Array(10).fill(false).map((v, i) => i === week ? status : v) }]
+    })
+  })
+  .then(res => res.text())
+  .then(msg => alert(msg))
+  .catch(err => alert("حدث خطأ: " + err));
+}
+
+/* ======================================================
+   4️⃣ تسجيل دارس جديد
+====================================================== */
+function registerNewStudent() {
+  const name = prompt("اسم الدارس:");
+  const code = prompt("كود الدارس (فريد):");
+  if (!name || !code) return alert("أدخل الاسم والكود معًا");
+  fetch(SCRIPT_URL, {
+    method: "POST",
+    body: JSON.stringify({
+      action: "addStudent",
+      student: { name, code }
+    })
+  })
+  .then(res => res.text())
+  .then(msg => alert(msg))
+  .catch(err => alert("حدث خطأ: " + err));
+}
+</script>
 </body>
 </html>
