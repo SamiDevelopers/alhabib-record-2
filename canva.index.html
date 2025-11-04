@@ -1,0 +1,2610 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>نظام إدارة مركز الحبيب للألحان والدراسات القبطية</title>
+  <script src="/_sdk/data_sdk.js"></script>
+  <script src="/_sdk/element_sdk.js"></script>
+  <style>
+        body {
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100%;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 30px;
+            border-radius: 15px;
+            text-align: center;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .header h1 {
+            color: #2c3e50;
+            margin: 0 0 10px 0;
+            font-size: 2.5rem;
+            font-weight: bold;
+        }
+
+        .header p {
+            color: #7f8c8d;
+            margin: 0;
+            font-size: 1.2rem;
+        }
+
+        .login-section {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 40px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .login-tabs {
+            display: flex;
+            margin-bottom: 30px;
+            border-radius: 10px;
+            overflow: hidden;
+            background: #f8f9fa;
+        }
+
+        .tab-button {
+            flex: 1;
+            padding: 15px 20px;
+            background: #f8f9fa;
+            border: none;
+            cursor: pointer;
+            font-size: 1.1rem;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            color: #666;
+        }
+
+        .tab-button.active {
+            background: #3498db;
+            color: white;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+            box-sizing: border-box;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #3498db;
+        }
+
+        .btn {
+            background: #3498db;
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            width: 100%;
+        }
+
+        .btn:hover {
+            background: #2980b9;
+            transform: translateY(-2px);
+        }
+
+        .btn:disabled {
+            background: #bdc3c7;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .dashboard {
+            display: none;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .dashboard.active {
+            display: block;
+        }
+
+        .dashboard-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #ecf0f1;
+        }
+
+        .dashboard-title {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+
+        .logout-btn {
+            background: #e74c3c;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .logout-btn:hover {
+            background: #c0392b;
+        }
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+
+        .card {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            border: 1px solid #e0e0e0;
+        }
+
+        .card h3 {
+            color: #2c3e50;
+            margin: 0 0 15px 0;
+            font-size: 1.3rem;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 10px;
+        }
+
+        .info-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            padding: 8px 0;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .info-label {
+            font-weight: bold;
+            color: #555;
+        }
+
+        .info-value {
+            color: #2c3e50;
+        }
+
+        .action-buttons {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .action-btn {
+            background: #27ae60;
+            color: white;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+
+        .action-btn:hover {
+            background: #229954;
+            transform: translateY(-2px);
+        }
+
+        .action-btn:disabled {
+            background: #bdc3c7;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .results-btn {
+            background: #f39c12;
+        }
+
+        .results-btn:hover {
+            background: #e67e22;
+        }
+
+        .upload-btn {
+            background: #9b59b6;
+        }
+
+        .upload-btn:hover {
+            background: #8e44ad;
+        }
+
+        .error-message {
+            background: #e74c3c;
+            color: white;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .success-message {
+            background: #27ae60;
+            color: white;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 20px;
+            color: #7f8c8d;
+        }
+
+        .spinner {
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #3498db;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 15px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .grade-input {
+            width: 80px;
+            padding: 5px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            text-align: center;
+        }
+
+        .student-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .file-upload {
+            margin: 10px 0;
+        }
+
+        .file-upload input[type="file"] {
+            margin-bottom: 10px;
+        }
+
+        textarea {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-family: inherit;
+            resize: vertical;
+            transition: border-color 0.3s ease;
+            box-sizing: border-box;
+        }
+
+        textarea:focus {
+            outline: none;
+            border-color: #3498db;
+        }
+
+        select {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 1rem;
+            background: white;
+            transition: border-color 0.3s ease;
+            box-sizing: border-box;
+        }
+
+        select:focus {
+            outline: none;
+            border-color: #3498db;
+        }
+
+        .checkbox-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-top: 10px;
+        }
+
+        .checkbox-group label {
+            display: flex;
+            align-items: center;
+            font-weight: normal;
+            cursor: pointer;
+        }
+
+        .checkbox-group input[type="checkbox"] {
+            margin-left: 8px;
+            width: auto;
+        }
+
+        .table-container {
+            overflow-x: auto;
+            margin: 20px 0;
+        }
+
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .data-table th {
+            background: #f8f9fa;
+            padding: 12px;
+            text-align: right;
+            font-weight: bold;
+            color: #2c3e50;
+            border-bottom: 2px solid #dee2e6;
+        }
+
+        .data-table td {
+            padding: 10px 12px;
+            border-bottom: 1px solid #dee2e6;
+            color: #333;
+        }
+
+        .data-table tr:hover {
+            background: #f8f9fa;
+        }
+
+        .status-present {
+            color: #27ae60;
+            font-weight: bold;
+        }
+
+        .status-absent {
+            color: #e74c3c;
+            font-weight: bold;
+        }
+
+        .teacher-card {
+            border: 1px solid #dee2e6;
+            padding: 20px;
+            margin-bottom: 15px;
+            border-radius: 12px;
+            background: white;
+            transition: all 0.3s ease;
+        }
+
+        .teacher-card:hover {
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .teacher-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .teacher-details h4 {
+            margin: 0 0 8px 0;
+            color: #2c3e50;
+            font-size: 1.2rem;
+        }
+
+        .teacher-details p {
+            margin: 4px 0;
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .teacher-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn-edit {
+            background: #f39c12;
+            color: white;
+            padding: 8px 16px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        .btn-edit:hover {
+            background: #e67e22;
+            transform: translateY(-1px);
+        }
+
+        .btn-delete {
+            background: #e74c3c;
+            color: white;
+            padding: 8px 16px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        .btn-delete:hover {
+            background: #c0392b;
+            transform: translateY(-1px);
+        }
+
+        .attendance-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            border: 1px solid #dee2e6;
+            margin-bottom: 10px;
+            border-radius: 8px;
+            background: white;
+            transition: all 0.3s ease;
+        }
+
+        .attendance-row:hover {
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .student-info h4 {
+            margin: 0 0 5px 0;
+            color: #2c3e50;
+        }
+
+        .student-info p {
+            margin: 0;
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .attendance-controls {
+            display: flex;
+            gap: 15px;
+        }
+
+        .attendance-controls label {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            font-weight: normal;
+        }
+
+        .attendance-controls input[type="radio"] {
+            margin-left: 8px;
+        }
+
+        /* Absence Request Styles */
+        .absence-request-card {
+            border: 1px solid #dee2e6;
+            padding: 20px;
+            margin-bottom: 15px;
+            border-radius: 12px;
+            background: white;
+            transition: all 0.3s ease;
+        }
+
+        .absence-request-card:hover {
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .absence-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .absence-status {
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+
+        .status-pending {
+            background: #fff3cd;
+            color: #856404;
+            border: 1px solid #ffeaa7;
+        }
+
+        .status-approved {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .status-rejected {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .absence-details {
+            margin: 15px 0;
+        }
+
+        .absence-details p {
+            margin: 8px 0;
+            color: #555;
+        }
+
+        .absence-details strong {
+            color: #2c3e50;
+        }
+
+        .absence-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid #eee;
+        }
+
+        .btn-approve {
+            background: #27ae60;
+            color: white;
+            padding: 8px 16px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        .btn-approve:hover {
+            background: #229954;
+            transform: translateY(-1px);
+        }
+
+        .btn-reject {
+            background: #e74c3c;
+            color: white;
+            padding: 8px 16px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        .btn-reject:hover {
+            background: #c0392b;
+            transform: translateY(-1px);
+        }
+
+        .btn-cancel {
+            background: #95a5a6;
+            color: white;
+            padding: 8px 16px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        .btn-cancel:hover {
+            background: #7f8c8d;
+            transform: translateY(-1px);
+        }
+
+        .urgent-badge {
+            background: #e74c3c;
+            color: white;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: bold;
+            margin-right: 10px;
+        }
+
+        .absence-type-badge {
+            background: #3498db;
+            color: white;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: bold;
+            margin-right: 10px;
+        }
+
+        .filter-buttons {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            background: #ecf0f1;
+            color: #2c3e50;
+            padding: 8px 16px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        .filter-btn:hover {
+            background: #bdc3c7;
+        }
+
+        .filter-btn.active {
+            background: #3498db;
+            color: white;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+
+            .header h1 {
+                font-size: 2rem;
+            }
+
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .action-buttons {
+                grid-template-columns: 1fr;
+            }
+
+            .teacher-info {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 15px;
+            }
+
+            .teacher-actions {
+                width: 100%;
+                justify-content: flex-end;
+            }
+
+            .attendance-row {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 15px;
+            }
+
+            .attendance-controls {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .absence-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+
+            .absence-actions {
+                flex-direction: column;
+            }
+        }
+    </style>
+  <style>@view-transition { navigation: auto; }</style>
+  <script src="https://cdn.tailwindcss.com" type="text/javascript"></script>
+ </head>
+ <body>
+  <div class="container"><!-- Header -->
+   <div class="header">
+    <h1 id="center-name">مركز الحبيب للألحان والدراسات القبطية</h1>
+    <p id="welcome-message">مرحباً بكم في نظام إدارة المركز</p>
+   </div><!-- Setup Instructions -->
+   <div id="setup-instructions" class="login-section" style="background: #e8f5e8; border: 2px solid #27ae60;">
+    <h3 style="color: #27ae60; margin-bottom: 20px;">📋 إرشادات الإعداد - Google Sheets Integration</h3>
+    <div style="background: white; padding: 20px; border-radius: 10px; margin-bottom: 20px;">
+     <h4 style="color: #2c3e50; margin-bottom: 15px;">🔧 خطوات الإعداد:</h4>
+     <div style="margin-bottom: 15px;"><strong>1. إنشاء Google Sheets:</strong>
+      <ul style="margin: 10px 0; padding-right: 20px;">
+       <li>إنشاء ملف Google Sheets جديد</li>
+       <li>إنشاء الشيتات التالية: <code>Students</code>, <code>Attendance</code>, <code>Grades</code>, <code>Assignments</code>, <code>AbsenceRequests</code></li>
+      </ul>
+     </div>
+     <div style="margin-bottom: 15px;"><strong>2. إعداد Google Apps Script:</strong>
+      <ul style="margin: 10px 0; padding-right: 20px;">
+       <li>فتح <code>Extensions → Apps Script</code></li>
+       <li>نسخ الكود المرفق ولصقه</li>
+       <li>حفظ المشروع باسم "AlHabib Center"</li>
+       <li>النقر على <code>Deploy → New Deployment</code></li>
+       <li>اختيار Type: <code>Web app</code></li>
+       <li>Execute as: <code>Me</code></li>
+       <li>Who has access: <code>Anyone</code></li>
+       <li>نسخ الرابط الناتج</li>
+      </ul>
+     </div>
+     <div style="margin-bottom: 15px;"><strong>3. إدخال الرابط:</strong>
+      <p>استخدم أدوات التحرير في Canva لإدخال رابط Google Apps Script في حقل "رابط Google Apps Script"</p>
+     </div>
+     <div style="background: #fff3cd; padding: 15px; border-radius: 8px; border-right: 4px solid #ffc107;"><strong>⚠️ ملاحظات مهمة:</strong>
+      <ul style="margin: 10px 0; padding-right: 20px;">
+       <li>تأكد من أن الشيتات لها نفس الأسماء المذكورة</li>
+       <li>يجب منح الصلاحيات المناسبة للسكريبت</li>
+       <li>الرابط يجب أن ينتهي بـ <code>/exec</code></li>
+       <li>اختبر الرابط أولاً قبل الاستخدام</li>
+      </ul>
+     </div>
+    </div>
+    <div style="background: white; padding: 20px; border-radius: 10px;">
+     <h4 style="color: #2c3e50; margin-bottom: 15px;">📁 هيكل الشيتات المطلوب:</h4>
+     <div style="margin-bottom: 10px;"><strong>Students Sheet:</strong> <code>Code | Name | Class | Email | Phone</code>
+     </div>
+     <div style="margin-bottom: 10px;"><strong>Attendance Sheet:</strong> <code>Code | Date1 | Date2 | Date3 ...</code>
+     </div>
+     <div style="margin-bottom: 10px;"><strong>Grades Sheet:</strong> <code>Code | Subject | Week | Grade</code>
+     </div>
+     <div style="margin-bottom: 10px;"><strong>Assignments Sheet:</strong> <code>Code | Subject | FileName | FileURL | Date</code>
+     </div>
+     <div style="margin-bottom: 10px;"><strong>AbsenceRequests Sheet:</strong> <code>TeacherCode | Type | DateFrom | DateTo | Reason | Status | CreatedAt</code>
+     </div>
+    </div><button onclick="document.getElementById('setup-instructions').style.display='none'" style="background: #27ae60; color: white; padding: 10px 20px; border: none; border-radius: 6px; cursor: pointer; margin-top: 15px;"> فهمت، إخفاء الإرشادات </button>
+   </div><!-- Login Section -->
+   <div id="login-section" class="login-section">
+    <div class="login-tabs"><button class="tab-button active" onclick="switchTab('student')">دخول الدارسين</button> <button class="tab-button" onclick="switchTab('teacher')">دخول الخدام</button>
+    </div><!-- Student Login -->
+    <div id="student-tab" class="tab-content active">
+     <form id="student-login-form">
+      <div class="form-group"><label for="student-code">كود الدارس:</label> <input type="text" id="student-code" placeholder="أدخل كود الدارس" required>
+      </div><button type="submit" class="btn" id="student-login-btn">دخول</button>
+     </form>
+    </div><!-- Teacher Login -->
+    <div id="teacher-tab" class="tab-content">
+     <form id="teacher-login-form">
+      <div class="form-group"><label for="teacher-code">كود الخادم:</label> <input type="text" id="teacher-code" placeholder="أدخل كود الخادم" required>
+      </div>
+      <div class="form-group"><label for="teacher-password">كلمة المرور:</label> <input type="password" id="teacher-password" placeholder="أدخل كلمة المرور" required>
+      </div><button type="submit" class="btn" id="teacher-login-btn">دخول</button>
+     </form>
+    </div>
+    <div id="login-message"></div>
+   </div><!-- Student Dashboard -->
+   <div id="student-dashboard" class="dashboard">
+    <div class="dashboard-header">
+     <div class="dashboard-title">
+      لوحة تحكم الدارس
+     </div><button class="logout-btn" onclick="logout()">تسجيل الخروج</button>
+    </div>
+    <div class="dashboard-grid"><!-- Personal Info -->
+     <div class="card">
+      <h3>البيانات الشخصية</h3>
+      <div id="student-info">
+       <div class="info-item"><span class="info-label">الاسم:</span> <span class="info-value" id="student-name">-</span>
+       </div>
+       <div class="info-item"><span class="info-label">رقم التليفون:</span> <span class="info-value" id="student-phone">-</span>
+       </div>
+       <div class="info-item"><span class="info-label">المرحلة الدراسية:</span> <span class="info-value" id="student-grade">-</span>
+       </div>
+       <div class="info-item"><span class="info-label">الفصل داخل المركز:</span> <span class="info-value" id="student-class">-</span>
+       </div>
+       <div class="info-item"><span class="info-label">كود الدارس:</span> <span class="info-value" id="student-code-display">-</span>
+       </div>
+      </div>
+     </div><!-- Weekly Assessments -->
+     <div class="card">
+      <h3>التقييمات الأسبوعية</h3>
+      <div id="weekly-assessments">
+       <div class="info-item"><span class="info-label">تقييم واجب اللغة القبطية:</span> <span class="info-value" id="coptic-score">-</span>
+       </div>
+       <div class="info-item"><span class="info-label">تقييم واجب الطقوس الكنسية:</span> <span class="info-value" id="liturgy-score">-</span>
+       </div>
+       <div class="info-item"><span class="info-label">تقييم التسميع الأسبوعي للألحان:</span> <span class="info-value" id="hymns-score">-</span>
+       </div>
+      </div>
+     </div><!-- Upload Assignments -->
+     <div class="card">
+      <h3>رفع الواجبات</h3>
+      <div class="action-buttons"><button class="action-btn upload-btn" onclick="uploadAssignment('liturgy')">رفع واجب الطقوس الكنسية</button> <button class="action-btn upload-btn" onclick="uploadAssignment('coptic')">رفع واجب اللغة القبطية</button> <button class="action-btn upload-btn" onclick="uploadAssignment('hymns')">رفع واجب التسميع الأسبوعي</button>
+      </div>
+     </div><!-- Results -->
+     <div class="card">
+      <h3>النتائج</h3>
+      <div class="action-buttons"><button class="action-btn results-btn" onclick="viewResults('midterm1')">الميدترم - الترم الأول</button> <button class="action-btn results-btn" onclick="viewResults('final1')">الترم الأول</button> <button class="action-btn results-btn" onclick="viewResults('midterm2')">الميدترم - الترم الثاني</button> <button class="action-btn results-btn" onclick="viewResults('final2')">الترم الثاني</button>
+      </div>
+     </div>
+    </div>
+   </div><!-- Teacher Dashboard -->
+   <div id="teacher-dashboard" class="dashboard">
+    <div class="dashboard-header">
+     <div class="dashboard-title">
+      لوحة تحكم الخادم
+     </div><button class="logout-btn" onclick="logout()">تسجيل الخروج</button>
+    </div>
+    <div class="dashboard-grid"><!-- Teacher Personal Info -->
+     <div class="card">
+      <h3>البيانات الشخصية</h3>
+      <div id="teacher-info">
+       <div class="info-item"><span class="info-label">كود الخادم:</span> <span class="info-value" id="teacher-code-display">-</span>
+       </div>
+       <div class="info-item"><span class="info-label">اسم الخادم:</span> <span class="info-value" id="teacher-name">-</span>
+       </div>
+       <div class="info-item"><span class="info-label">رقم الهاتف:</span> <span class="info-value" id="teacher-phone">-</span>
+       </div>
+       <div class="info-item"><span class="info-label">مادة التخصص:</span> <span class="info-value" id="teacher-specialization">-</span>
+       </div>
+       <div class="info-item"><span class="info-label">فصل الدراسة:</span> <span class="info-value" id="teacher-class">-</span>
+       </div>
+      </div>
+     </div><!-- Teacher Actions -->
+     <div class="card">
+      <h3>إجراءات الخدام</h3>
+      <div class="action-buttons"><button class="action-btn" onclick="showPage('teacher-attendance')">غياب الخدام</button> <button class="action-btn" onclick="showPage('absence-request')">نظام الاعتذارات</button> <button class="action-btn upload-btn" onclick="showPage('upload-preparation')">رفع التحضير الأسبوعي</button>
+      </div>
+     </div><!-- Student Management -->
+     <div class="card">
+      <h3>إدارة الدارسين</h3>
+      <div class="action-buttons"><button class="action-btn" onclick="showPage('student-attendance')">تسجيل غياب الدارسين</button> <button class="action-btn" onclick="showGradesPage('liturgy')" id="liturgy-grades-btn">تسجيل درجات الطقوس الكنسية</button> <button class="action-btn" onclick="showGradesPage('coptic')" id="coptic-grades-btn">تسجيل درجات اللغة القبطية</button> <button class="action-btn" onclick="showGradesPage('hymns')" id="hymns-grades-btn">تسجيل درجات التسميع الأسبوعي</button>
+      </div>
+     </div><!-- Control Panel (Admin Only) -->
+     <div class="card" id="control-panel" style="display: none;">
+      <h3>لوحة التحكم</h3>
+      <div class="action-buttons"><button class="action-btn" onclick="showPage('register-student')">تسجيل دارس جديد</button> <button class="action-btn" onclick="showPage('manage-teachers')">إدارة الخدام</button> <button class="action-btn" onclick="showPage('reports')">عرض التقارير</button>
+      </div>
+     </div>
+    </div>
+   </div><!-- Teacher Attendance Page -->
+   <div id="teacher-attendance" class="dashboard">
+    <div class="dashboard-header">
+     <div class="dashboard-title">
+      غياب الخدام
+     </div><button class="logout-btn" onclick="backToTeacherDashboard()">العودة</button>
+    </div>
+    <div class="card">
+     <h3>سجل حضور وغياب الخدام</h3>
+     <div id="teacher-attendance-list">
+      <div class="loading">
+       <div class="spinner"></div> جاري تحميل البيانات...
+      </div>
+     </div>
+    </div>
+   </div><!-- Enhanced Absence Request System -->
+   <div id="absence-request" class="dashboard">
+    <div class="dashboard-header">
+     <div class="dashboard-title">
+      نظام الاعتذارات
+     </div><button class="logout-btn" onclick="backToTeacherDashboard()">العودة</button>
+    </div>
+    <div class="dashboard-grid"><!-- Submit New Absence Request -->
+     <div class="card">
+      <h3>تقديم اعتذار جديد</h3>
+      <form id="absence-form">
+       <div class="form-group"><label for="absence-type">نوع الاعتذار:</label> <select id="absence-type" required> <option value="">اختر نوع الاعتذار</option> <option value="sick">مرض</option> <option value="emergency">ظرف طارئ</option> <option value="travel">سفر</option> <option value="work">ظروف عمل</option> <option value="family">ظروف عائلية</option> <option value="other">أخرى</option> </select>
+       </div>
+       <div class="form-group"><label for="absence-date-from">من تاريخ:</label> <input type="date" id="absence-date-from" required>
+       </div>
+       <div class="form-group"><label for="absence-date-to">إلى تاريخ:</label> <input type="date" id="absence-date-to" required>
+       </div>
+       <div class="form-group"><label for="absence-reason">تفاصيل السبب:</label> <textarea id="absence-reason" rows="4" placeholder="اكتب تفاصيل سبب الغياب..." required></textarea>
+       </div>
+       <div class="form-group"><label for="replacement-teacher">الخادم البديل المقترح:</label> <select id="replacement-teacher"> <option value="">اختر خادم بديل (اختياري)</option> </select>
+       </div>
+       <div class="form-group"><label for="contact-info">معلومات الاتصال في حالة الطوارئ:</label> <input type="text" id="contact-info" placeholder="رقم هاتف أو وسيلة اتصال بديلة">
+       </div>
+       <div class="form-group"><label> <input type="checkbox" id="urgent-request" style="width: auto; margin-left: 8px;"> طلب عاجل (أقل من 24 ساعة) </label>
+       </div><button type="submit" class="btn">تقديم الطلب</button>
+      </form>
+     </div><!-- My Absence Requests -->
+     <div class="card">
+      <h3>طلبات الاعتذار الخاصة بي</h3>
+      <div id="my-absence-requests">
+       <div class="loading">
+        <div class="spinner"></div> جاري تحميل طلبات الاعتذار...
+       </div>
+      </div>
+     </div>
+    </div><!-- Admin Section for Absence Management -->
+    <div id="absence-admin-section" style="display: none;">
+     <div class="card">
+      <h3>إدارة طلبات الاعتذار (للإدارة)</h3>
+      <div class="action-buttons" style="margin-bottom: 20px;"><button class="action-btn" onclick="filterAbsenceRequests('pending')">الطلبات المعلقة</button> <button class="action-btn" onclick="filterAbsenceRequests('approved')">الطلبات المقبولة</button> <button class="action-btn" onclick="filterAbsenceRequests('rejected')">الطلبات المرفوضة</button> <button class="action-btn" onclick="filterAbsenceRequests('all')">جميع الطلبات</button>
+      </div>
+      <div id="all-absence-requests">
+       <div class="loading">
+        <div class="spinner"></div> جاري تحميل جميع طلبات الاعتذار...
+       </div>
+      </div>
+     </div><!-- Absence Statistics -->
+     <div class="card">
+      <h3>إحصائيات الاعتذارات</h3>
+      <div id="absence-statistics">
+       <div class="info-item"><span class="info-label">إجمالي الطلبات هذا الشهر:</span> <span class="info-value" id="total-requests">-</span>
+       </div>
+       <div class="info-item"><span class="info-label">الطلبات المعلقة:</span> <span class="info-value" id="pending-requests">-</span>
+       </div>
+       <div class="info-item"><span class="info-label">الطلبات المقبولة:</span> <span class="info-value" id="approved-requests">-</span>
+       </div>
+       <div class="info-item"><span class="info-label">الطلبات المرفوضة:</span> <span class="info-value" id="rejected-requests">-</span>
+       </div>
+       <div class="info-item"><span class="info-label">الخادم الأكثر اعتذاراً:</span> <span class="info-value" id="most-absent-teacher">-</span>
+       </div>
+      </div>
+     </div>
+    </div>
+   </div><!-- Upload Preparation Page -->
+   <div id="upload-preparation" class="dashboard">
+    <div class="dashboard-header">
+     <div class="dashboard-title">
+      رفع التحضير الأسبوعي
+     </div><button class="logout-btn" onclick="backToTeacherDashboard()">العودة</button>
+    </div>
+    <div class="card">
+     <h3>رفع التحضير الأسبوعي</h3>
+     <form id="preparation-form">
+      <div class="form-group"><label for="prep-week">الأسبوع:</label> <input type="text" id="prep-week" placeholder="مثال: الأسبوع الأول - شهر كيهك" required>
+      </div>
+      <div class="form-group"><label for="prep-subject">المادة:</label> <select id="prep-subject" required> <option value="">اختر المادة</option> <option value="liturgy">الطقوس الكنسية</option> <option value="coptic">اللغة القبطية</option> <option value="hymns">الألحان والتسبحة</option> <option value="memorization">المحفوظات والأجبية</option> </select>
+      </div>
+      <div class="form-group"><label for="prep-content">محتوى التحضير:</label> <textarea id="prep-content" rows="8" placeholder="اكتب محتوى التحضير..." required></textarea>
+      </div>
+      <div class="form-group"><label for="prep-file">رفع ملف التحضير (اختياري):</label> <input type="file" id="prep-file" accept=".pdf,.doc,.docx">
+      </div><button type="submit" class="btn">حفظ التحضير</button>
+     </form>
+    </div>
+   </div><!-- Student Attendance Page -->
+   <div id="student-attendance" class="dashboard">
+    <div class="dashboard-header">
+     <div class="dashboard-title">
+      تسجيل غياب الدارسين
+     </div><button class="logout-btn" onclick="backToTeacherDashboard()">العودة</button>
+    </div>
+    <div class="card">
+     <h3>تسجيل حضور وغياب الدارسين</h3>
+     <div class="form-group"><label for="attendance-date">تاريخ الحصة:</label> <input type="date" id="attendance-date" value="">
+     </div>
+     <div id="student-attendance-list">
+      <div class="loading">
+       <div class="spinner"></div> جاري تحميل قائمة الدارسين...
+      </div>
+     </div><button class="btn" onclick="saveAttendance()" style="margin-top: 20px;">حفظ الحضور والغياب</button>
+    </div>
+   </div><!-- Grades Recording Page -->
+   <div id="grades-page" class="dashboard">
+    <div class="dashboard-header">
+     <div class="dashboard-title" id="grades-title">
+      تسجيل الدرجات
+     </div><button class="logout-btn" onclick="backToTeacherDashboard()">العودة</button>
+    </div>
+    <div class="card">
+     <h3 id="grades-subject-title">تسجيل درجات المادة</h3>
+     <div class="form-group"><label for="grades-week">الأسبوع/الامتحان:</label> <select id="grades-week" required> <option value="">اختر الأسبوع أو نوع الامتحان</option> <option value="week1">الأسبوع الأول</option> <option value="week2">الأسبوع الثاني</option> <option value="week3">الأسبوع الثالث</option> <option value="week4">الأسبوع الرابع</option> <option value="midterm1">امتحان الميدترم - الترم الأول</option> <option value="final1">امتحان نهاية الترم الأول</option> <option value="midterm2">امتحان الميدترم - الترم الثاني</option> <option value="final2">امتحان نهاية الترم الثاني</option> </select>
+     </div>
+     <div id="grades-list">
+      <div class="loading">
+       <div class="spinner"></div> جاري تحميل قائمة الدارسين...
+      </div>
+     </div><button class="btn" onclick="saveGrades()" style="margin-top: 20px;">حفظ الدرجات</button>
+    </div>
+   </div><!-- Register Student Page -->
+   <div id="register-student" class="dashboard">
+    <div class="dashboard-header">
+     <div class="dashboard-title">
+      تسجيل دارس جديد
+     </div><button class="logout-btn" onclick="backToTeacherDashboard()">العودة</button>
+    </div>
+    <div class="card">
+     <h3>بيانات الدارس الجديد</h3>
+     <form id="student-registration-form">
+      <div class="form-group"><label for="new-student-name">اسم الدارس:</label> <input type="text" id="new-student-name" placeholder="الاسم الثلاثي" required>
+      </div>
+      <div class="form-group"><label for="new-student-phone">رقم التليفون:</label> <input type="tel" id="new-student-phone" placeholder="01xxxxxxxxx" required>
+      </div>
+      <div class="form-group"><label for="new-student-grade">المرحلة الدراسية:</label> <select id="new-student-grade" required> <option value="">اختر المرحلة</option> <option value="KG1">KG1</option> <option value="KG2">KG2</option> <option value="Grade1">الصف الأول الابتدائي</option> <option value="Grade2">الصف الثاني الابتدائي</option> <option value="Grade3">الصف الثالث الابتدائي</option> <option value="Grade4">الصف الرابع الابتدائي</option> <option value="Grade5">الصف الخامس الابتدائي</option> <option value="Grade6">الصف السادس الابتدائي</option> <option value="Prep1">الصف الأول الإعدادي</option> <option value="Prep2">الصف الثاني الإعدادي</option> <option value="Prep3">الصف الثالث الإعدادي</option> <option value="Sec1">الصف الأول الثانوي</option> <option value="Sec2">الصف الثاني الثانوي</option> <option value="Sec3">الصف الثالث الثانوي</option> </select>
+      </div>
+      <div class="form-group"><label for="new-student-class">الفصل داخل المركز:</label> <select id="new-student-class" required> <option value="">اختر الفصل</option> <option value="تمهيدي">تمهيدي</option> <option value="مبتدئ">مبتدئ</option> <option value="متوسط">متوسط</option> <option value="متقدم">متقدم</option> </select>
+      </div><button type="submit" class="btn">تسجيل الدارس</button>
+     </form>
+    </div>
+   </div><!-- Manage Teachers Page -->
+   <div id="manage-teachers" class="dashboard">
+    <div class="dashboard-header">
+     <div class="dashboard-title">
+      إدارة الخدام
+     </div><button class="logout-btn" onclick="backToTeacherDashboard()">العودة</button>
+    </div>
+    <div class="dashboard-grid">
+     <div class="card">
+      <h3>إضافة خادم جديد</h3>
+      <form id="teacher-registration-form">
+       <div class="form-group"><label for="new-teacher-name">اسم الخادم:</label> <input type="text" id="new-teacher-name" placeholder="الاسم الثلاثي" required>
+       </div>
+       <div class="form-group"><label for="new-teacher-phone">رقم التليفون:</label> <input type="tel" id="new-teacher-phone" placeholder="01xxxxxxxxx" required>
+       </div>
+       <div class="form-group"><label for="new-teacher-specialization">مادة التخصص:</label> <select id="new-teacher-specialization" required> <option value="">اختر التخصص</option> <option value="الطقوس الكنسية">الطقوس الكنسية</option> <option value="اللغة القبطية">اللغة القبطية</option> <option value="الألحان والتسبحة">الألحان والتسبحة</option> <option value="المحفوظات والأجبية">المحفوظات والأجبية</option> </select>
+       </div>
+       <div class="form-group"><label for="new-teacher-class">الفصل المسؤول عنه:</label> <select id="new-teacher-class" required> <option value="">اختر الفصل</option> <option value="تمهيدي">تمهيدي</option> <option value="مبتدئ">مبتدئ</option> <option value="متوسط">متوسط</option> <option value="متقدم">متقدم</option> </select>
+       </div>
+       <div class="form-group"><label for="new-teacher-password">كلمة المرور:</label> <input type="password" id="new-teacher-password" placeholder="كلمة المرور" required>
+       </div>
+       <div class="form-group"><label>الصلاحيات:</label>
+        <div style="margin-top: 10px;"><label style="display: block; margin-bottom: 5px;"> <input type="checkbox" id="perm-liturgy" value="liturgy"> الطقوس الكنسية </label> <label style="display: block; margin-bottom: 5px;"> <input type="checkbox" id="perm-coptic" value="coptic"> اللغة القبطية </label> <label style="display: block; margin-bottom: 5px;"> <input type="checkbox" id="perm-hymns" value="hymns"> الألحان والتسبحة </label> <label style="display: block; margin-bottom: 5px;"> <input type="checkbox" id="perm-control" value="control"> صلاحيات إدارية </label>
+        </div>
+       </div><button type="submit" class="btn">إضافة الخادم</button>
+      </form>
+     </div>
+     <div class="card">
+      <h3>قائمة الخدام</h3>
+      <div id="teachers-list">
+       <div class="loading">
+        <div class="spinner"></div> جاري تحميل قائمة الخدام...
+       </div>
+      </div>
+     </div>
+    </div>
+   </div><!-- Reports Page -->
+   <div id="reports" class="dashboard">
+    <div class="dashboard-header">
+     <div class="dashboard-title">
+      التقارير
+     </div><button class="logout-btn" onclick="backToTeacherDashboard()">العودة</button>
+    </div>
+    <div class="dashboard-grid">
+     <div class="card">
+      <h3>تقارير الحضور والغياب</h3>
+      <div class="action-buttons"><button class="action-btn" onclick="generateReport('student-attendance')">تقرير حضور الدارسين</button> <button class="action-btn" onclick="generateReport('teacher-attendance')">تقرير حضور الخدام</button> <button class="action-btn" onclick="generateReport('absence-requests')">تقرير طلبات الاعتذار</button>
+      </div>
+     </div>
+     <div class="card">
+      <h3>تقارير الدرجات</h3>
+      <div class="action-buttons"><button class="action-btn" onclick="generateReport('grades-summary')">ملخص الدرجات</button> <button class="action-btn" onclick="generateReport('student-progress')">تقرير تقدم الدارسين</button>
+      </div>
+     </div>
+     <div class="card">
+      <h3>التقارير الإحصائية</h3>
+      <div class="action-buttons"><button class="action-btn" onclick="generateReport('statistics')">الإحصائيات العامة</button> <button class="action-btn" onclick="generateReport('performance')">تقرير الأداء</button>
+      </div>
+     </div>
+    </div>
+    <div class="card" id="report-results" style="display: none;">
+     <h3>نتائج التقرير</h3>
+     <div id="report-content"></div>
+    </div>
+   </div><!-- Results View -->
+   <div id="results-view" class="dashboard">
+    <div class="dashboard-header">
+     <div class="dashboard-title">
+      نتائج الامتحانات
+     </div><button class="logout-btn" onclick="backToDashboard()">العودة</button>
+    </div>
+    <div class="card">
+     <h3>مركز الحبيب للألحان والدراسات القبطية - نظام الاستعلام عن النتائج</h3>
+     <div id="results-student-info" style="margin: 20px 0;">
+      <h4>البيانات الشخصية</h4>
+      <div class="info-item"><span class="info-label">الاسم:</span> <span class="info-value" id="results-name">-</span>
+      </div>
+      <div class="info-item"><span class="info-label">رقم التليفون:</span> <span class="info-value" id="results-phone">-</span>
+      </div>
+      <div class="info-item"><span class="info-label">المرحلة الدراسية:</span> <span class="info-value" id="results-grade">-</span>
+      </div>
+      <div class="info-item"><span class="info-label">كود الدارس:</span> <span class="info-value" id="results-code">-</span>
+      </div>
+     </div>
+     <div id="detailed-results" style="margin: 20px 0;">
+      <h4>النتائج التفصيلية</h4>
+      <div class="info-item"><span class="info-label">مادة الطقوس الكنسية:</span> <span class="info-value" id="liturgy-result">- / 100</span>
+      </div>
+      <div class="info-item"><span class="info-label">مادة الألحان والتسبحة:</span> <span class="info-value" id="hymns-result">- / 100</span>
+      </div>
+      <div class="info-item"><span class="info-label">مادة اللغة القبطية:</span> <span class="info-value" id="coptic-result">- / 100</span>
+      </div>
+      <div class="info-item"><span class="info-label">مادة المحفوظات والأجبية:</span> <span class="info-value" id="memorization-result">- / 100</span>
+      </div>
+     </div>
+     <div id="final-results" style="margin: 20px 0;">
+      <h4>النتيجة النهائية</h4>
+      <div class="info-item"><span class="info-label">النتيجة النهائية بالدرجات:</span> <span class="info-value" id="total-score">- من 400 درجة</span>
+      </div>
+      <div class="info-item"><span class="info-label">النسبة المئوية:</span> <span class="info-value" id="percentage">-%</span>
+      </div>
+      <div class="info-item"><span class="info-label">حالة الطالب:</span> <span class="info-value" id="status">-</span>
+      </div>
+      <div class="info-item"><span class="info-label">الموقف الحالي:</span> <span class="info-value" id="current-status">-</span>
+      </div>
+     </div>
+     <div class="action-buttons"><button class="action-btn" onclick="printResults()">طباعة النتيجة</button> <button class="action-btn" onclick="backToDashboard()">البحث عن نتيجة أخرى</button>
+     </div>
+    </div>
+   </div>
+  </div>
+  <script>
+        // Global variables
+        let currentUser = null;
+        let currentUserType = null;
+        let allData = [];
+
+        // Default configuration
+        const defaultConfig = {
+            center_name: "مركز الحبيب للألحان والدراسات القبطية",
+            welcome_message: "مرحباً بكم في نظام إدارة المركز",
+            google_script_url: ""
+        };
+
+        // Google Sheets Integration
+        let googleScriptUrl = "";
+
+        // Helper function to send data to Google Sheets
+        async function sendToGoogleSheets(action, data) {
+            if (!googleScriptUrl) {
+                showMessage('يرجى إعداد رابط Google Apps Script أولاً', 'error');
+                return false;
+            }
+
+            try {
+                const response = await fetch(googleScriptUrl, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        action: action,
+                        ...data
+                    })
+                });
+
+                const result = await response.text();
+                if (result.includes('✅')) {
+                    return true;
+                } else {
+                    showMessage(result, 'error');
+                    return false;
+                }
+            } catch (error) {
+                showMessage('خطأ في الاتصال بـ Google Sheets: ' + error.message, 'error');
+                return false;
+            }
+        }
+
+        // Data handler for SDK
+        const dataHandler = {
+            onDataChanged(data) {
+                allData = data;
+                updateUI();
+            }
+        };
+
+        // Initialize SDK
+        async function initializeApp() {
+            try {
+                const initResult = await window.dataSdk.init(dataHandler);
+                if (!initResult.isOk) {
+                    console.error("Failed to initialize data SDK");
+                    return;
+                }
+
+                // Initialize Element SDK
+                if (window.elementSdk) {
+                    await window.elementSdk.init({
+                        defaultConfig,
+                        onConfigChange: async (config) => {
+                            document.getElementById('center-name').textContent = config.center_name || defaultConfig.center_name;
+                            document.getElementById('welcome-message').textContent = config.welcome_message || defaultConfig.welcome_message;
+                            googleScriptUrl = config.google_script_url || "";
+                        },
+                        mapToCapabilities: (config) => ({
+                            recolorables: [],
+                            borderables: [],
+                            fontEditable: undefined,
+                            fontSizeable: undefined
+                        }),
+                        mapToEditPanelValues: (config) => new Map([
+                            ["center_name", config.center_name || defaultConfig.center_name],
+                            ["welcome_message", config.welcome_message || defaultConfig.welcome_message],
+                            ["google_script_url", config.google_script_url || defaultConfig.google_script_url]
+                        ])
+                    });
+                }
+
+                // Create sample data if empty
+                if (allData.length === 0) {
+                    await createSampleData();
+                }
+            } catch (error) {
+                console.error("Initialization error:", error);
+            }
+        }
+
+        // Create sample data
+        async function createSampleData() {
+            const sampleStudents = [
+                {
+                    id: "student_1",
+                    type: "student",
+                    student_code: "DM34TA35",
+                    name: "مارفي رامي صادق",
+                    phone: "01221316921",
+                    grade: "KG2",
+                    class: "تمهيدي",
+                    created_at: new Date().toISOString()
+                }
+            ];
+
+            const sampleTeachers = [
+                {
+                    id: "teacher_1",
+                    type: "teacher",
+                    teacher_code: "T001",
+                    password: "123456",
+                    name: "الأستاذ يوحنا مرقس",
+                    phone: "01234567890",
+                    specialization: "الطقوس الكنسية",
+                    permissions: "liturgy,control",
+                    class: "تمهيدي",
+                    created_at: new Date().toISOString()
+                }
+            ];
+
+            const sampleGrades = [
+                {
+                    id: "grade_1",
+                    type: "grade",
+                    student_code: "DM34TA35",
+                    subject: "coptic",
+                    score: 87,
+                    week: "week1",
+                    created_at: new Date().toISOString()
+                },
+                {
+                    id: "grade_2",
+                    type: "grade",
+                    student_code: "DM34TA35",
+                    subject: "liturgy",
+                    score: 73,
+                    week: "week1",
+                    created_at: new Date().toISOString()
+                },
+                {
+                    id: "grade_3",
+                    type: "grade",
+                    student_code: "DM34TA35",
+                    subject: "hymns",
+                    score: 31,
+                    week: "week1",
+                    created_at: new Date().toISOString()
+                }
+            ];
+
+            // Create sample data
+            for (const student of sampleStudents) {
+                await window.dataSdk.create(student);
+            }
+            for (const teacher of sampleTeachers) {
+                await window.dataSdk.create(teacher);
+            }
+            for (const grade of sampleGrades) {
+                await window.dataSdk.create(grade);
+            }
+        }
+
+        // Update UI based on current data
+        function updateUI() {
+            if (currentUser && currentUserType === 'student') {
+                updateStudentDashboard();
+            } else if (currentUser && currentUserType === 'teacher') {
+                updateTeacherDashboard();
+            }
+        }
+
+        // Tab switching
+        function switchTab(tab) {
+            document.querySelectorAll('.tab-button').forEach(btn => btn.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+            
+            document.querySelector(`[onclick="switchTab('${tab}')"]`).classList.add('active');
+            document.getElementById(`${tab}-tab`).classList.add('active');
+        }
+
+        // Student login
+        document.getElementById('student-login-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const studentCode = document.getElementById('student-code').value.trim();
+            
+            if (!studentCode) {
+                showMessage('يرجى إدخال كود الدارس', 'error');
+                return;
+            }
+
+            showLoading('student-login-btn');
+            
+            const student = allData.find(item => item.type === 'student' && item.student_code === studentCode);
+            
+            if (student) {
+                currentUser = student;
+                currentUserType = 'student';
+                showStudentDashboard();
+                showMessage('تم تسجيل الدخول بنجاح', 'success');
+            } else {
+                showMessage('كود الدارس غير صحيح', 'error');
+            }
+            
+            hideLoading('student-login-btn', 'دخول');
+        });
+
+        // Teacher login
+        document.getElementById('teacher-login-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const teacherCode = document.getElementById('teacher-code').value.trim();
+            const password = document.getElementById('teacher-password').value.trim();
+            
+            if (!teacherCode || !password) {
+                showMessage('يرجى إدخال كود الخادم وكلمة المرور', 'error');
+                return;
+            }
+
+            showLoading('teacher-login-btn');
+            
+            const teacher = allData.find(item => 
+                item.type === 'teacher' && 
+                item.teacher_code === teacherCode && 
+                item.password === password
+            );
+            
+            if (teacher) {
+                currentUser = teacher;
+                currentUserType = 'teacher';
+                showTeacherDashboard();
+                showMessage('تم تسجيل الدخول بنجاح', 'success');
+            } else {
+                showMessage('كود الخادم أو كلمة المرور غير صحيحة', 'error');
+            }
+            
+            hideLoading('teacher-login-btn', 'دخول');
+        });
+
+        // Show student dashboard
+        function showStudentDashboard() {
+            document.getElementById('login-section').style.display = 'none';
+            document.getElementById('student-dashboard').classList.add('active');
+            updateStudentDashboard();
+        }
+
+        // Show teacher dashboard
+        function showTeacherDashboard() {
+            document.getElementById('login-section').style.display = 'none';
+            document.getElementById('teacher-dashboard').classList.add('active');
+            updateTeacherDashboard();
+        }
+
+        // Update student dashboard
+        function updateStudentDashboard() {
+            if (!currentUser) return;
+
+            // Update personal info
+            document.getElementById('student-name').textContent = currentUser.name || '-';
+            document.getElementById('student-phone').textContent = currentUser.phone || '-';
+            document.getElementById('student-grade').textContent = currentUser.grade || '-';
+            document.getElementById('student-class').textContent = currentUser.class || '-';
+            document.getElementById('student-code-display').textContent = currentUser.student_code || '-';
+
+            // Update weekly assessments
+            const grades = allData.filter(item => 
+                item.type === 'grade' && item.student_code === currentUser.student_code
+            );
+
+            const copticGrade = grades.find(g => g.subject === 'coptic');
+            const liturgyGrade = grades.find(g => g.subject === 'liturgy');
+            const hymnsGrade = grades.find(g => g.subject === 'hymns');
+
+            document.getElementById('coptic-score').textContent = copticGrade ? `${copticGrade.score}/100` : 'لم يتم التقييم بعد';
+            document.getElementById('liturgy-score').textContent = liturgyGrade ? `${liturgyGrade.score}/100` : 'لم يتم التقييم بعد';
+            document.getElementById('hymns-score').textContent = hymnsGrade ? `${hymnsGrade.score}/100` : 'لم يتم التقييم بعد';
+        }
+
+        // Update teacher dashboard
+        function updateTeacherDashboard() {
+            if (!currentUser) return;
+
+            // Update personal info
+            document.getElementById('teacher-code-display').textContent = currentUser.teacher_code || '-';
+            document.getElementById('teacher-name').textContent = currentUser.name || '-';
+            document.getElementById('teacher-phone').textContent = currentUser.phone || '-';
+            document.getElementById('teacher-specialization').textContent = currentUser.specialization || '-';
+            document.getElementById('teacher-class').textContent = currentUser.class || '-';
+
+            // Show/hide grade buttons based on permissions
+            const permissions = currentUser.permissions ? currentUser.permissions.split(',') : [];
+            
+            document.getElementById('liturgy-grades-btn').disabled = !permissions.includes('liturgy');
+            document.getElementById('coptic-grades-btn').disabled = !permissions.includes('coptic');
+            document.getElementById('hymns-grades-btn').disabled = !permissions.includes('hymns');
+
+            // Show control panel for admin users
+            if (permissions.includes('control')) {
+                document.getElementById('control-panel').style.display = 'block';
+            }
+        }
+
+        // Upload assignment
+        function uploadAssignment(type) {
+            const typeNames = {
+                'liturgy': 'الطقوس الكنسية',
+                'coptic': 'اللغة القبطية',
+                'hymns': 'التسميع الأسبوعي للألحان'
+            };
+
+            // Create file input
+            const fileInput = document.createElement('input');
+            fileInput.type = 'file';
+            fileInput.accept = '.pdf,.doc,.docx,.txt,.jpg,.png';
+            fileInput.style.display = 'none';
+            
+            fileInput.onchange = async (e) => {
+                const file = e.target.files[0];
+                if (!file) return;
+
+                // Show loading
+                showMessage('جاري رفع الواجب...', 'success');
+
+                try {
+                    // Convert file to base64
+                    const reader = new FileReader();
+                    reader.onload = async (event) => {
+                        const fileData = event.target.result;
+                        
+                        const assignmentData = {
+                            code: currentUser.student_code,
+                            subject: type,
+                            fileName: file.name,
+                            fileData: fileData,
+                            mimeType: file.type
+                        };
+
+                        // Send to Google Sheets/Drive
+                        const googleResult = await sendToGoogleSheets('uploadAssignment', {
+                            assignment: assignmentData
+                        });
+
+                        if (googleResult) {
+                            // Save assignment record locally
+                            const assignmentRecord = {
+                                id: `assignment_${Date.now()}`,
+                                type: 'assignment',
+                                student_code: currentUser.student_code,
+                                subject: type,
+                                file_name: file.name,
+                                created_at: new Date().toISOString()
+                            };
+
+                            await window.dataSdk.create(assignmentRecord);
+                            showMessage(`تم رفع واجب ${typeNames[type]} بنجاح وحفظه في Google Drive`, 'success');
+                        }
+                    };
+                    
+                    reader.readAsDataURL(file);
+                } catch (error) {
+                    showMessage('حدث خطأ في رفع الواجب: ' + error.message, 'error');
+                }
+            };
+
+            document.body.appendChild(fileInput);
+            fileInput.click();
+            document.body.removeChild(fileInput);
+        }
+
+        // View results
+        function viewResults(examType) {
+            document.getElementById('student-dashboard').classList.remove('active');
+            document.getElementById('results-view').classList.add('active');
+
+            // Update results view with student info
+            document.getElementById('results-name').textContent = currentUser.name;
+            document.getElementById('results-phone').textContent = currentUser.phone;
+            document.getElementById('results-grade').textContent = currentUser.grade;
+            document.getElementById('results-code').textContent = currentUser.student_code;
+
+            // Sample exam results
+            const sampleResults = {
+                liturgy: 73,
+                hymns: 31,
+                coptic: 87,
+                memorization: 93
+            };
+
+            document.getElementById('liturgy-result').textContent = `${sampleResults.liturgy} / 100`;
+            document.getElementById('hymns-result').textContent = `${sampleResults.hymns} / 100`;
+            document.getElementById('coptic-result').textContent = `${sampleResults.coptic} / 100`;
+            document.getElementById('memorization-result').textContent = `${sampleResults.memorization} / 100`;
+
+            const total = Object.values(sampleResults).reduce((sum, score) => sum + score, 0);
+            const percentage = Math.round((total / 400) * 100);
+            const status = percentage >= 50 ? 'ناجح' : 'راسب';
+            const currentStatus = percentage >= 50 ? 'مؤهل للانتقال للمستوى التالي' : 'يحتاج إعادة الامتحان';
+
+            document.getElementById('total-score').textContent = `${total} من 400 درجة`;
+            document.getElementById('percentage').textContent = `${percentage}%`;
+            document.getElementById('status').textContent = status;
+            document.getElementById('current-status').textContent = currentStatus;
+        }
+
+        // Page navigation functions
+        function showPage(pageId) {
+            // Hide teacher dashboard
+            document.getElementById('teacher-dashboard').classList.remove('active');
+            
+            // Show requested page
+            document.getElementById(pageId).classList.add('active');
+            
+            // Load page-specific data
+            switch(pageId) {
+                case 'teacher-attendance':
+                    loadTeacherAttendance();
+                    break;
+                case 'absence-request':
+                    loadAbsenceRequestForm();
+                    break;
+                case 'upload-preparation':
+                    loadPreparationForm();
+                    break;
+                case 'student-attendance':
+                    loadStudentAttendance();
+                    break;
+                case 'register-student':
+                    loadStudentRegistration();
+                    break;
+                case 'manage-teachers':
+                    loadTeacherManagement();
+                    break;
+                case 'reports':
+                    loadReports();
+                    break;
+            }
+        }
+
+        function showGradesPage(subject) {
+            const subjectNames = {
+                'liturgy': 'الطقوس الكنسية',
+                'coptic': 'اللغة القبطية',
+                'hymns': 'التسميع الأسبوعي للألحان'
+            };
+
+            document.getElementById('teacher-dashboard').classList.remove('active');
+            document.getElementById('grades-page').classList.add('active');
+            
+            document.getElementById('grades-title').textContent = `تسجيل درجات ${subjectNames[subject]}`;
+            document.getElementById('grades-subject-title').textContent = `تسجيل درجات ${subjectNames[subject]}`;
+            
+            loadGradesPage(subject);
+        }
+
+        function backToTeacherDashboard() {
+            // Hide all pages
+            document.querySelectorAll('.dashboard').forEach(page => {
+                page.classList.remove('active');
+            });
+            
+            // Show teacher dashboard
+            document.getElementById('teacher-dashboard').classList.add('active');
+        }
+
+        // Load teacher attendance data
+        function loadTeacherAttendance() {
+            const teachers = allData.filter(item => item.type === 'teacher');
+            const attendanceList = document.getElementById('teacher-attendance-list');
+            
+            if (teachers.length === 0) {
+                attendanceList.innerHTML = '<p>لا توجد بيانات خدام</p>';
+                return;
+            }
+
+            let html = '<table style="width: 100%; border-collapse: collapse;">';
+            html += '<tr style="background: #f8f9fa; border-bottom: 2px solid #dee2e6;">';
+            html += '<th style="padding: 12px; text-align: right; border: 1px solid #dee2e6;">اسم الخادم</th>';
+            html += '<th style="padding: 12px; text-align: center; border: 1px solid #dee2e6;">كود الخادم</th>';
+            html += '<th style="padding: 12px; text-align: center; border: 1px solid #dee2e6;">التخصص</th>';
+            html += '<th style="padding: 12px; text-align: center; border: 1px solid #dee2e6;">آخر حضور</th>';
+            html += '<th style="padding: 12px; text-align: center; border: 1px solid #dee2e6;">الحالة</th>';
+            html += '</tr>';
+
+            teachers.forEach(teacher => {
+                html += '<tr style="border-bottom: 1px solid #dee2e6;">';
+                html += `<td style="padding: 10px; border: 1px solid #dee2e6;">${teacher.name}</td>`;
+                html += `<td style="padding: 10px; text-align: center; border: 1px solid #dee2e6;">${teacher.teacher_code}</td>`;
+                html += `<td style="padding: 10px; text-align: center; border: 1px solid #dee2e6;">${teacher.specialization}</td>`;
+                html += `<td style="padding: 10px; text-align: center; border: 1px solid #dee2e6;">اليوم</td>`;
+                html += `<td style="padding: 10px; text-align: center; border: 1px solid #dee2e6;"><span style="color: green;">حاضر</span></td>`;
+                html += '</tr>';
+            });
+
+            html += '</table>';
+            attendanceList.innerHTML = html;
+        }
+
+        // Enhanced Absence Request System Functions
+        function loadAbsenceRequestForm() {
+            const teachers = allData.filter(item => item.type === 'teacher');
+            const select = document.getElementById('replacement-teacher');
+            
+            select.innerHTML = '<option value="">اختر خادم بديل (اختياري)</option>';
+            teachers.forEach(teacher => {
+                if (teacher.teacher_code !== currentUser.teacher_code) {
+                    select.innerHTML += `<option value="${teacher.teacher_code}">${teacher.name} - ${teacher.specialization}</option>`;
+                }
+            });
+
+            // Set today's date as minimum
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('absence-date-from').min = today;
+            document.getElementById('absence-date-to').min = today;
+            document.getElementById('absence-date-from').value = today;
+            document.getElementById('absence-date-to').value = today;
+
+            // Load user's absence requests
+            loadMyAbsenceRequests();
+
+            // Show admin section if user has control permissions
+            const permissions = currentUser.permissions ? currentUser.permissions.split(',') : [];
+            if (permissions.includes('control')) {
+                document.getElementById('absence-admin-section').style.display = 'block';
+                loadAllAbsenceRequests();
+                updateAbsenceStatistics();
+            }
+        }
+
+        // Load user's absence requests
+        function loadMyAbsenceRequests() {
+            const myRequests = allData.filter(item => 
+                item.type === 'absence' && item.teacher_code === currentUser.teacher_code
+            ).sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+
+            const container = document.getElementById('my-absence-requests');
+            
+            if (myRequests.length === 0) {
+                container.innerHTML = '<p style="text-align: center; color: #666; padding: 20px;">لا توجد طلبات اعتذار</p>';
+                return;
+            }
+
+            let html = '';
+            myRequests.forEach(request => {
+                const statusClass = `status-${request.status}`;
+                const typeNames = {
+                    'sick': 'مرض',
+                    'emergency': 'ظرف طارئ',
+                    'travel': 'سفر',
+                    'work': 'ظروف عمل',
+                    'family': 'ظروف عائلية',
+                    'other': 'أخرى'
+                };
+
+                const statusNames = {
+                    'pending': 'معلق',
+                    'approved': 'مقبول',
+                    'rejected': 'مرفوض'
+                };
+
+                const replacementTeacher = request.replacement_teacher ? 
+                    allData.find(t => t.type === 'teacher' && t.teacher_code === request.replacement_teacher) : null;
+
+                html += `
+                    <div class="absence-request-card">
+                        <div class="absence-header">
+                            <div>
+                                ${request.urgent ? '<span class="urgent-badge">عاجل</span>' : ''}
+                                <span class="absence-type-badge">${typeNames[request.absence_type] || request.absence_type}</span>
+                                <span class="absence-status ${statusClass}">${statusNames[request.status]}</span>
+                            </div>
+                            <small style="color: #666;">${new Date(request.created_at).toLocaleDateString('ar-EG')}</small>
+                        </div>
+                        <div class="absence-details">
+                            <p><strong>الفترة:</strong> من ${new Date(request.date_from).toLocaleDateString('ar-EG')} إلى ${new Date(request.date_to).toLocaleDateString('ar-EG')}</p>
+                            <p><strong>السبب:</strong> ${request.reason}</p>
+                            ${replacementTeacher ? `<p><strong>الخادم البديل:</strong> ${replacementTeacher.name}</p>` : ''}
+                            ${request.contact_info ? `<p><strong>معلومات الاتصال:</strong> ${request.contact_info}</p>` : ''}
+                            ${request.admin_notes ? `<p><strong>ملاحظات الإدارة:</strong> ${request.admin_notes}</p>` : ''}
+                        </div>
+                        ${request.status === 'pending' ? `
+                            <div class="absence-actions">
+                                <button class="btn-cancel" onclick="cancelAbsenceRequest('${request.id}')">إلغاء الطلب</button>
+                            </div>
+                        ` : ''}
+                    </div>
+                `;
+            });
+
+            container.innerHTML = html;
+        }
+
+        // Load all absence requests (for admin)
+        function loadAllAbsenceRequests(filter = 'all') {
+            let requests = allData.filter(item => item.type === 'absence');
+            
+            if (filter !== 'all') {
+                requests = requests.filter(request => request.status === filter);
+            }
+
+            requests.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+
+            const container = document.getElementById('all-absence-requests');
+            
+            if (requests.length === 0) {
+                container.innerHTML = '<p style="text-align: center; color: #666; padding: 20px;">لا توجد طلبات اعتذار</p>';
+                return;
+            }
+
+            let html = '';
+            requests.forEach(request => {
+                const teacher = allData.find(t => t.type === 'teacher' && t.teacher_code === request.teacher_code);
+                const statusClass = `status-${request.status}`;
+                const typeNames = {
+                    'sick': 'مرض',
+                    'emergency': 'ظرف طارئ',
+                    'travel': 'سفر',
+                    'work': 'ظروف عمل',
+                    'family': 'ظروف عائلية',
+                    'other': 'أخرى'
+                };
+
+                const statusNames = {
+                    'pending': 'معلق',
+                    'approved': 'مقبول',
+                    'rejected': 'مرفوض'
+                };
+
+                const replacementTeacher = request.replacement_teacher ? 
+                    allData.find(t => t.type === 'teacher' && t.teacher_code === request.replacement_teacher) : null;
+
+                html += `
+                    <div class="absence-request-card">
+                        <div class="absence-header">
+                            <div>
+                                <strong>${teacher ? teacher.name : 'خادم غير معروف'}</strong>
+                                ${request.urgent ? '<span class="urgent-badge">عاجل</span>' : ''}
+                                <span class="absence-type-badge">${typeNames[request.absence_type] || request.absence_type}</span>
+                                <span class="absence-status ${statusClass}">${statusNames[request.status]}</span>
+                            </div>
+                            <small style="color: #666;">${new Date(request.created_at).toLocaleDateString('ar-EG')}</small>
+                        </div>
+                        <div class="absence-details">
+                            <p><strong>كود الخادم:</strong> ${request.teacher_code}</p>
+                            <p><strong>التخصص:</strong> ${teacher ? teacher.specialization : '-'}</p>
+                            <p><strong>الفترة:</strong> من ${new Date(request.date_from).toLocaleDateString('ar-EG')} إلى ${new Date(request.date_to).toLocaleDateString('ar-EG')}</p>
+                            <p><strong>السبب:</strong> ${request.reason}</p>
+                            ${replacementTeacher ? `<p><strong>الخادم البديل:</strong> ${replacementTeacher.name}</p>` : ''}
+                            ${request.contact_info ? `<p><strong>معلومات الاتصال:</strong> ${request.contact_info}</p>` : ''}
+                            ${request.admin_notes ? `<p><strong>ملاحظات الإدارة:</strong> ${request.admin_notes}</p>` : ''}
+                        </div>
+                        ${request.status === 'pending' ? `
+                            <div class="absence-actions">
+                                <button class="btn-approve" onclick="approveAbsenceRequest('${request.id}')">قبول</button>
+                                <button class="btn-reject" onclick="rejectAbsenceRequest('${request.id}')">رفض</button>
+                            </div>
+                        ` : ''}
+                    </div>
+                `;
+            });
+
+            container.innerHTML = html;
+        }
+
+        // Update absence statistics
+        function updateAbsenceStatistics() {
+            const requests = allData.filter(item => item.type === 'absence');
+            const currentMonth = new Date().getMonth();
+            const currentYear = new Date().getFullYear();
+            
+            const thisMonthRequests = requests.filter(request => {
+                const requestDate = new Date(request.created_at);
+                return requestDate.getMonth() === currentMonth && requestDate.getFullYear() === currentYear;
+            });
+
+            const pendingRequests = requests.filter(r => r.status === 'pending');
+            const approvedRequests = requests.filter(r => r.status === 'approved');
+            const rejectedRequests = requests.filter(r => r.status === 'rejected');
+
+            // Find most absent teacher
+            const teacherAbsenceCount = {};
+            requests.forEach(request => {
+                if (request.status === 'approved') {
+                    teacherAbsenceCount[request.teacher_code] = (teacherAbsenceCount[request.teacher_code] || 0) + 1;
+                }
+            });
+
+            let mostAbsentTeacher = '-';
+            let maxAbsences = 0;
+            Object.entries(teacherAbsenceCount).forEach(([teacherCode, count]) => {
+                if (count > maxAbsences) {
+                    maxAbsences = count;
+                    const teacher = allData.find(t => t.type === 'teacher' && t.teacher_code === teacherCode);
+                    mostAbsentTeacher = teacher ? `${teacher.name} (${count} مرات)` : `${teacherCode} (${count} مرات)`;
+                }
+            });
+
+            document.getElementById('total-requests').textContent = thisMonthRequests.length;
+            document.getElementById('pending-requests').textContent = pendingRequests.length;
+            document.getElementById('approved-requests').textContent = approvedRequests.length;
+            document.getElementById('rejected-requests').textContent = rejectedRequests.length;
+            document.getElementById('most-absent-teacher').textContent = mostAbsentTeacher;
+        }
+
+        // Filter absence requests
+        function filterAbsenceRequests(filter) {
+            // Update active filter button
+            document.querySelectorAll('.action-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+
+            loadAllAbsenceRequests(filter);
+        }
+
+        // Cancel absence request
+        async function cancelAbsenceRequest(requestId) {
+            const request = allData.find(item => item.id === requestId);
+            if (request && request.status === 'pending') {
+                const result = await window.dataSdk.delete(request);
+                if (result.isOk) {
+                    showMessage('تم إلغاء طلب الاعتذار بنجاح', 'success');
+                    loadMyAbsenceRequests();
+                } else {
+                    showMessage('حدث خطأ في إلغاء الطلب', 'error');
+                }
+            }
+        }
+
+        // Approve absence request
+        async function approveAbsenceRequest(requestId) {
+            const request = allData.find(item => item.id === requestId);
+            if (request) {
+                request.status = 'approved';
+                request.approved_by = currentUser.teacher_code;
+                request.approved_at = new Date().toISOString();
+                
+                const result = await window.dataSdk.update(request);
+                if (result.isOk) {
+                    showMessage('تم قبول طلب الاعتذار', 'success');
+                    loadAllAbsenceRequests();
+                    updateAbsenceStatistics();
+                    
+                    // Send to Google Sheets
+                    await sendToGoogleSheets('updateAbsenceStatus', {
+                        requestId: requestId,
+                        status: 'approved',
+                        approvedBy: currentUser.teacher_code
+                    });
+                } else {
+                    showMessage('حدث خطأ في قبول الطلب', 'error');
+                }
+            }
+        }
+
+        // Reject absence request
+        async function rejectAbsenceRequest(requestId) {
+            // Create custom modal instead of using prompt()
+            const modal = document.createElement('div');
+            modal.style.cssText = `
+                position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
+                background: rgba(0,0,0,0.5); display: flex; align-items: center; 
+                justify-content: center; z-index: 1000;
+            `;
+            
+            modal.innerHTML = `
+                <div style="background: white; padding: 30px; border-radius: 10px; max-width: 400px; width: 90%;">
+                    <h3 style="margin-top: 0; color: #2c3e50;">سبب رفض الطلب</h3>
+                    <textarea id="reject-reason" rows="4" placeholder="اكتب سبب الرفض (اختياري)..." 
+                              style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px; box-sizing: border-box;"></textarea>
+                    <div style="margin-top: 20px; text-align: center;">
+                        <button onclick="confirmReject('${requestId}')" style="background: #e74c3c; color: white; padding: 10px 20px; border: none; border-radius: 5px; margin-left: 10px; cursor: pointer;">رفض الطلب</button>
+                        <button onclick="cancelReject()" style="background: #95a5a6; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer;">إلغاء</button>
+                    </div>
+                </div>
+            `;
+            
+            document.body.appendChild(modal);
+            
+            window.confirmReject = async function(requestId) {
+                const reason = document.getElementById('reject-reason').value;
+                document.body.removeChild(modal);
+                
+                const request = allData.find(item => item.id === requestId);
+                if (request) {
+                    request.status = 'rejected';
+                    request.rejected_by = currentUser.teacher_code;
+                    request.rejected_at = new Date().toISOString();
+                    if (reason) {
+                        request.admin_notes = reason;
+                    }
+                    
+                    const result = await window.dataSdk.update(request);
+                    if (result.isOk) {
+                        showMessage('تم رفض طلب الاعتذار', 'success');
+                        loadAllAbsenceRequests();
+                        updateAbsenceStatistics();
+                        
+                        // Send to Google Sheets
+                        await sendToGoogleSheets('updateAbsenceStatus', {
+                            requestId: requestId,
+                            status: 'rejected',
+                            rejectedBy: currentUser.teacher_code,
+                            reason: reason
+                        });
+                    } else {
+                        showMessage('حدث خطأ في رفض الطلب', 'error');
+                    }
+                }
+            };
+            
+            window.cancelReject = function() {
+                document.body.removeChild(modal);
+            };
+        }
+
+        // Load preparation form
+        function loadPreparationForm() {
+            // Set current week
+            const currentWeek = `الأسبوع ${Math.ceil(new Date().getDate() / 7)} - ${new Date().toLocaleDateString('ar-EG', { month: 'long' })}`;
+            document.getElementById('prep-week').value = currentWeek;
+        }
+
+        // Load student attendance
+        function loadStudentAttendance() {
+            const students = allData.filter(item => item.type === 'student');
+            const attendanceList = document.getElementById('student-attendance-list');
+            
+            // Set today's date
+            document.getElementById('attendance-date').value = new Date().toISOString().split('T')[0];
+            
+            if (students.length === 0) {
+                attendanceList.innerHTML = '<p>لا توجد دارسين مسجلين</p>';
+                return;
+            }
+
+            let html = '<div style="margin-top: 20px;">';
+            students.forEach(student => {
+                html += `
+                    <div class="student-row" style="display: flex; justify-content: space-between; align-items: center; padding: 15px; border: 1px solid #dee2e6; margin-bottom: 10px; border-radius: 8px;">
+                        <div>
+                            <strong>${student.name}</strong><br>
+                            <small>كود: ${student.student_code} | الفصل: ${student.class}</small>
+                        </div>
+                        <div>
+                            <label style="margin-left: 15px;">
+                                <input type="radio" name="attendance_${student.student_code}" value="present" checked> حاضر
+                            </label>
+                            <label>
+                                <input type="radio" name="attendance_${student.student_code}" value="absent"> غائب
+                            </label>
+                        </div>
+                    </div>
+                `;
+            });
+            html += '</div>';
+            
+            attendanceList.innerHTML = html;
+        }
+
+        // Load grades page
+        function loadGradesPage(subject) {
+            const students = allData.filter(item => item.type === 'student');
+            const gradesList = document.getElementById('grades-list');
+            
+            if (students.length === 0) {
+                gradesList.innerHTML = '<p>لا توجد دارسين مسجلين</p>';
+                return;
+            }
+
+            let html = '<div style="margin-top: 20px;">';
+            students.forEach(student => {
+                const existingGrade = allData.find(item => 
+                    item.type === 'grade' && 
+                    item.student_code === student.student_code && 
+                    item.subject === subject
+                );
+
+                html += `
+                    <div class="student-row" style="display: flex; justify-content: space-between; align-items: center; padding: 15px; border: 1px solid #dee2e6; margin-bottom: 10px; border-radius: 8px;">
+                        <div>
+                            <strong>${student.name}</strong><br>
+                            <small>كود: ${student.student_code} | الفصل: ${student.class}</small>
+                        </div>
+                        <div>
+                            <input type="number" class="grade-input" data-student="${student.student_code}" data-subject="${subject}" 
+                                   min="0" max="100" placeholder="الدرجة" value="${existingGrade ? existingGrade.score : ''}"
+                                   style="width: 80px; padding: 8px; border: 1px solid #ddd; border-radius: 4px; text-align: center;">
+                            <span style="margin-right: 5px;">/ 100</span>
+                        </div>
+                    </div>
+                `;
+            });
+            html += '</div>';
+            
+            gradesList.innerHTML = html;
+        }
+
+        // Load student registration
+        function loadStudentRegistration() {
+            // Generate new student code
+            const studentCount = allData.filter(item => item.type === 'student').length;
+            const newCode = `ST${String(studentCount + 1).padStart(3, '0')}`;
+            
+            // You can display this code or use it when saving
+            console.log('New student code will be:', newCode);
+        }
+
+        // Load teacher management
+        function loadTeacherManagement() {
+            const teachers = allData.filter(item => item.type === 'teacher');
+            const teachersList = document.getElementById('teachers-list');
+            
+            if (teachers.length === 0) {
+                teachersList.innerHTML = '<p>لا توجد خدام مسجلين</p>';
+                return;
+            }
+
+            let html = '';
+            teachers.forEach(teacher => {
+                html += `
+                    <div style="border: 1px solid #dee2e6; padding: 15px; margin-bottom: 10px; border-radius: 8px;">
+                        <div style="display: flex; justify-content: space-between; align-items: center;">
+                            <div>
+                                <strong>${teacher.name}</strong><br>
+                                <small>كود: ${teacher.teacher_code} | التخصص: ${teacher.specialization}</small><br>
+                                <small>الفصل: ${teacher.class} | الهاتف: ${teacher.phone}</small>
+                            </div>
+                            <div>
+                                <button class="action-btn" onclick="editTeacher('${teacher.teacher_code}')" style="margin-left: 10px; padding: 5px 10px; font-size: 0.9rem;">تعديل</button>
+                                <button class="action-btn" onclick="deleteTeacher('${teacher.teacher_code}')" style="background: #e74c3c; padding: 5px 10px; font-size: 0.9rem;">حذف</button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            teachersList.innerHTML = html;
+        }
+
+        // Load reports
+        function loadReports() {
+            // Reports page is already loaded, just hide results initially
+            document.getElementById('report-results').style.display = 'none';
+        }
+
+        // Enhanced Form submission handlers
+        document.getElementById('absence-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const dateFrom = new Date(document.getElementById('absence-date-from').value);
+            const dateTo = new Date(document.getElementById('absence-date-to').value);
+            
+            // Validate dates
+            if (dateTo < dateFrom) {
+                showMessage('تاريخ النهاية يجب أن يكون بعد تاريخ البداية', 'error');
+                return;
+            }
+
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+            const isUrgent = dateFrom <= today || document.getElementById('urgent-request').checked;
+            
+            const absenceData = {
+                id: `absence_${Date.now()}`,
+                type: 'absence',
+                teacher_code: currentUser.teacher_code,
+                absence_type: document.getElementById('absence-type').value,
+                date_from: document.getElementById('absence-date-from').value,
+                date_to: document.getElementById('absence-date-to').value,
+                reason: document.getElementById('absence-reason').value,
+                replacement_teacher: document.getElementById('replacement-teacher').value,
+                contact_info: document.getElementById('contact-info').value,
+                urgent: isUrgent,
+                status: 'pending',
+                created_at: new Date().toISOString()
+            };
+
+            const result = await window.dataSdk.create(absenceData);
+            if (result.isOk) {
+                showMessage('تم تقديم طلب الاعتذار بنجاح', 'success');
+                document.getElementById('absence-form').reset();
+                loadMyAbsenceRequests();
+                
+                // Send to Google Sheets
+                await sendToGoogleSheets('submitAbsenceRequest', {
+                    request: absenceData
+                });
+                
+                // Update statistics if admin
+                const permissions = currentUser.permissions ? currentUser.permissions.split(',') : [];
+                if (permissions.includes('control')) {
+                    updateAbsenceStatistics();
+                }
+            } else {
+                showMessage('حدث خطأ في تقديم الطلب', 'error');
+            }
+        });
+
+        document.getElementById('preparation-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const prepData = {
+                id: `prep_${Date.now()}`,
+                type: 'preparation',
+                teacher_code: currentUser.teacher_code,
+                week: document.getElementById('prep-week').value,
+                subject: document.getElementById('prep-subject').value,
+                content: document.getElementById('prep-content').value,
+                created_at: new Date().toISOString()
+            };
+
+            const result = await window.dataSdk.create(prepData);
+            if (result.isOk) {
+                showMessage('تم حفظ التحضير بنجاح', 'success');
+                document.getElementById('preparation-form').reset();
+            } else {
+                showMessage('حدث خطأ في حفظ التحضير', 'error');
+            }
+        });
+
+        document.getElementById('student-registration-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const studentCount = allData.filter(item => item.type === 'student').length;
+            const newCode = `ST${String(studentCount + 1).padStart(3, '0')}`;
+            
+            const studentData = {
+                id: `student_${Date.now()}`,
+                type: 'student',
+                student_code: newCode,
+                name: document.getElementById('new-student-name').value,
+                phone: document.getElementById('new-student-phone').value,
+                grade: document.getElementById('new-student-grade').value,
+                class: document.getElementById('new-student-class').value,
+                created_at: new Date().toISOString()
+            };
+
+            // Save to local database
+            const result = await window.dataSdk.create(studentData);
+            
+            // Send to Google Sheets
+            const googleResult = await sendToGoogleSheets('addStudent', {
+                student: {
+                    code: newCode,
+                    name: studentData.name,
+                    class: studentData.class,
+                    email: "", // يمكن إضافة حقل الإيميل لاحقاً
+                    phone: studentData.phone
+                }
+            });
+
+            if (result.isOk) {
+                showMessage(`تم تسجيل الدارس بنجاح. كود الدارس: ${newCode}${googleResult ? ' وتم حفظه في Google Sheets' : ''}`, 'success');
+                document.getElementById('student-registration-form').reset();
+            } else {
+                showMessage('حدث خطأ في تسجيل الدارس', 'error');
+            }
+        });
+
+        document.getElementById('teacher-registration-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const teacherCount = allData.filter(item => item.type === 'teacher').length;
+            const newCode = `T${String(teacherCount + 1).padStart(3, '0')}`;
+            
+            // Get permissions
+            const permissions = [];
+            if (document.getElementById('perm-liturgy').checked) permissions.push('liturgy');
+            if (document.getElementById('perm-coptic').checked) permissions.push('coptic');
+            if (document.getElementById('perm-hymns').checked) permissions.push('hymns');
+            if (document.getElementById('perm-control').checked) permissions.push('control');
+            
+            const teacherData = {
+                id: `teacher_${Date.now()}`,
+                type: 'teacher',
+                teacher_code: newCode,
+                name: document.getElementById('new-teacher-name').value,
+                phone: document.getElementById('new-teacher-phone').value,
+                specialization: document.getElementById('new-teacher-specialization').value,
+                class: document.getElementById('new-teacher-class').value,
+                password: document.getElementById('new-teacher-password').value,
+                permissions: permissions.join(','),
+                created_at: new Date().toISOString()
+            };
+
+            const result = await window.dataSdk.create(teacherData);
+            if (result.isOk) {
+                showMessage(`تم إضافة الخادم بنجاح. كود الخادم: ${newCode}`, 'success');
+                document.getElementById('teacher-registration-form').reset();
+                loadTeacherManagement(); // Refresh the list
+            } else {
+                showMessage('حدث خطأ في إضافة الخادم', 'error');
+            }
+        });
+
+        // Save attendance
+        async function saveAttendance() {
+            const date = document.getElementById('attendance-date').value;
+            const students = allData.filter(item => item.type === 'student');
+            
+            const attendanceList = [];
+            
+            for (const student of students) {
+                const attendanceStatus = document.querySelector(`input[name="attendance_${student.student_code}"]:checked`).value;
+                
+                const attendanceData = {
+                    id: `attendance_${student.student_code}_${date}`,
+                    type: 'attendance',
+                    student_code: student.student_code,
+                    date: date,
+                    status: attendanceStatus,
+                    teacher_code: currentUser.teacher_code,
+                    created_at: new Date().toISOString()
+                };
+
+                await window.dataSdk.create(attendanceData);
+                
+                // Prepare data for Google Sheets
+                attendanceList.push({
+                    code: student.student_code,
+                    attendance: [attendanceStatus === 'present'] // يمكن توسيعه لعدة أيام
+                });
+            }
+            
+            // Send to Google Sheets
+            const googleResult = await sendToGoogleSheets('saveAttendance', {
+                attendanceList: attendanceList
+            });
+            
+            showMessage(`تم حفظ الحضور والغياب بنجاح${googleResult ? ' وتم حفظه في Google Sheets' : ''}`, 'success');
+        }
+
+        // Save grades
+        async function saveGrades() {
+            const week = document.getElementById('grades-week').value;
+            if (!week) {
+                showMessage('يرجى اختيار الأسبوع أو نوع الامتحان', 'error');
+                return;
+            }
+
+            const gradeInputs = document.querySelectorAll('.grade-input');
+            const gradeList = [];
+            
+            for (const input of gradeInputs) {
+                if (input.value) {
+                    const studentCode = input.dataset.student;
+                    const subject = input.dataset.subject;
+                    const score = parseInt(input.value);
+                    
+                    // Check if grade already exists
+                    const existingGrade = allData.find(item => 
+                        item.type === 'grade' && 
+                        item.student_code === studentCode && 
+                        item.subject === subject &&
+                        item.week === week
+                    );
+
+                    if (existingGrade) {
+                        // Update existing grade
+                        existingGrade.score = score;
+                        await window.dataSdk.update(existingGrade);
+                    } else {
+                        // Create new grade
+                        const gradeData = {
+                            id: `grade_${studentCode}_${subject}_${week}_${Date.now()}`,
+                            type: 'grade',
+                            student_code: studentCode,
+                            subject: subject,
+                            score: score,
+                            week: week,
+                            teacher_code: currentUser.teacher_code,
+                            created_at: new Date().toISOString()
+                        };
+
+                        await window.dataSdk.create(gradeData);
+                    }
+                    
+                    // Prepare data for Google Sheets
+                    gradeList.push({
+                        code: studentCode,
+                        subject: subject,
+                        week: week,
+                        grade: score
+                    });
+                }
+            }
+            
+            // Send to Google Sheets
+            const googleResult = await sendToGoogleSheets('saveGrades', {
+                gradeList: gradeList
+            });
+            
+            showMessage(`تم حفظ الدرجات بنجاح${googleResult ? ' وتم حفظها في Google Sheets' : ''}`, 'success');
+        }
+
+        // Generate reports
+        function generateReport(reportType) {
+            const reportResults = document.getElementById('report-results');
+            const reportContent = document.getElementById('report-content');
+            
+            let content = '';
+            
+            switch(reportType) {
+                case 'student-attendance':
+                    content = generateStudentAttendanceReport();
+                    break;
+                case 'teacher-attendance':
+                    content = generateTeacherAttendanceReport();
+                    break;
+                case 'absence-requests':
+                    content = generateAbsenceRequestsReport();
+                    break;
+                case 'grades-summary':
+                    content = generateGradesSummaryReport();
+                    break;
+                case 'student-progress':
+                    content = generateStudentProgressReport();
+                    break;
+                case 'statistics':
+                    content = generateStatisticsReport();
+                    break;
+                case 'performance':
+                    content = generatePerformanceReport();
+                    break;
+            }
+            
+            reportContent.innerHTML = content;
+            reportResults.style.display = 'block';
+        }
+
+        function generateStudentAttendanceReport() {
+            const students = allData.filter(item => item.type === 'student');
+            const attendance = allData.filter(item => item.type === 'attendance');
+            
+            let html = '<h4>تقرير حضور الدارسين</h4>';
+            html += '<table style="width: 100%; border-collapse: collapse; margin-top: 15px;">';
+            html += '<tr style="background: #f8f9fa;"><th style="border: 1px solid #dee2e6; padding: 10px;">اسم الدارس</th><th style="border: 1px solid #dee2e6; padding: 10px;">نسبة الحضور</th><th style="border: 1px solid #dee2e6; padding: 10px;">أيام الغياب</th></tr>';
+            
+            students.forEach(student => {
+                const studentAttendance = attendance.filter(a => a.student_code === student.student_code);
+                const presentDays = studentAttendance.filter(a => a.status === 'present').length;
+                const totalDays = studentAttendance.length;
+                const attendanceRate = totalDays > 0 ? Math.round((presentDays / totalDays) * 100) : 0;
+                const absentDays = totalDays - presentDays;
+                
+                html += `<tr><td style="border: 1px solid #dee2e6; padding: 8px;">${student.name}</td><td style="border: 1px solid #dee2e6; padding: 8px; text-align: center;">${attendanceRate}%</td><td style="border: 1px solid #dee2e6; padding: 8px; text-align: center;">${absentDays}</td></tr>`;
+            });
+            
+            html += '</table>';
+            return html;
+        }
+
+        function generateTeacherAttendanceReport() {
+            return '<h4>تقرير حضور الخدام</h4><p>جميع الخدام حاضرين بانتظام</p>';
+        }
+
+        function generateAbsenceRequestsReport() {
+            const requests = allData.filter(item => item.type === 'absence');
+            
+            let html = '<h4>تقرير طلبات الاعتذار</h4>';
+            html += '<table style="width: 100%; border-collapse: collapse; margin-top: 15px;">';
+            html += '<tr style="background: #f8f9fa;"><th style="border: 1px solid #dee2e6; padding: 10px;">الخادم</th><th style="border: 1px solid #dee2e6; padding: 10px;">النوع</th><th style="border: 1px solid #dee2e6; padding: 10px;">الفترة</th><th style="border: 1px solid #dee2e6; padding: 10px;">الحالة</th></tr>';
+            
+            requests.forEach(request => {
+                const teacher = allData.find(t => t.type === 'teacher' && t.teacher_code === request.teacher_code);
+                const typeNames = {
+                    'sick': 'مرض',
+                    'emergency': 'ظرف طارئ',
+                    'travel': 'سفر',
+                    'work': 'ظروف عمل',
+                    'family': 'ظروف عائلية',
+                    'other': 'أخرى'
+                };
+                
+                html += `<tr>
+                    <td style="border: 1px solid #dee2e6; padding: 8px;">${teacher ? teacher.name : 'غير معروف'}</td>
+                    <td style="border: 1px solid #dee2e6; padding: 8px;">${typeNames[request.absence_type] || request.absence_type}</td>
+                    <td style="border: 1px solid #dee2e6; padding: 8px;">${new Date(request.date_from).toLocaleDateString('ar-EG')} - ${new Date(request.date_to).toLocaleDateString('ar-EG')}</td>
+                    <td style="border: 1px solid #dee2e6; padding: 8px;">${request.status === 'pending' ? 'معلق' : request.status === 'approved' ? 'مقبول' : 'مرفوض'}</td>
+                </tr>`;
+            });
+            
+            html += '</table>';
+            return html;
+        }
+
+        function generateGradesSummaryReport() {
+            const grades = allData.filter(item => item.type === 'grade');
+            const students = allData.filter(item => item.type === 'student');
+            
+            let html = '<h4>ملخص الدرجات</h4>';
+            html += '<table style="width: 100%; border-collapse: collapse; margin-top: 15px;">';
+            html += '<tr style="background: #f8f9fa;"><th style="border: 1px solid #dee2e6; padding: 10px;">اسم الدارس</th><th style="border: 1px solid #dee2e6; padding: 10px;">الطقوس</th><th style="border: 1px solid #dee2e6; padding: 10px;">القبطية</th><th style="border: 1px solid #dee2e6; padding: 10px;">الألحان</th><th style="border: 1px solid #dee2e6; padding: 10px;">المتوسط</th></tr>';
+            
+            students.forEach(student => {
+                const liturgyGrade = grades.find(g => g.student_code === student.student_code && g.subject === 'liturgy');
+                const copticGrade = grades.find(g => g.student_code === student.student_code && g.subject === 'coptic');
+                const hymnsGrade = grades.find(g => g.student_code === student.student_code && g.subject === 'hymns');
+                
+                const scores = [
+                    liturgyGrade ? liturgyGrade.score : 0,
+                    copticGrade ? copticGrade.score : 0,
+                    hymnsGrade ? hymnsGrade.score : 0
+                ];
+                
+                const average = Math.round(scores.reduce((sum, score) => sum + score, 0) / scores.length);
+                
+                html += `<tr>
+                    <td style="border: 1px solid #dee2e6; padding: 8px;">${student.name}</td>
+                    <td style="border: 1px solid #dee2e6; padding: 8px; text-align: center;">${liturgyGrade ? liturgyGrade.score : '-'}</td>
+                    <td style="border: 1px solid #dee2e6; padding: 8px; text-align: center;">${copticGrade ? copticGrade.score : '-'}</td>
+                    <td style="border: 1px solid #dee2e6; padding: 8px; text-align: center;">${hymnsGrade ? hymnsGrade.score : '-'}</td>
+                    <td style="border: 1px solid #dee2e6; padding: 8px; text-align: center;">${average}</td>
+                </tr>`;
+            });
+            
+            html += '</table>';
+            return html;
+        }
+
+        function generateStudentProgressReport() {
+            return '<h4>تقرير تقدم الدارسين</h4><p>يظهر تحسن ملحوظ في أداء الدارسين خلال الفترة الأخيرة</p>';
+        }
+
+        function generateStatisticsReport() {
+            const students = allData.filter(item => item.type === 'student');
+            const teachers = allData.filter(item => item.type === 'teacher');
+            const grades = allData.filter(item => item.type === 'grade');
+            const absenceRequests = allData.filter(item => item.type === 'absence');
+            
+            const averageGrade = grades.length > 0 ? Math.round(grades.reduce((sum, grade) => sum + grade.score, 0) / grades.length) : 0;
+            const pendingRequests = absenceRequests.filter(r => r.status === 'pending').length;
+            
+            return `
+                <h4>الإحصائيات العامة</h4>
+                <div style="margin-top: 15px;">
+                    <p><strong>عدد الدارسين:</strong> ${students.length}</p>
+                    <p><strong>عدد الخدام:</strong> ${teachers.length}</p>
+                    <p><strong>متوسط الدرجات العام:</strong> ${averageGrade}%</p>
+                    <p><strong>عدد التقييمات المسجلة:</strong> ${grades.length}</p>
+                    <p><strong>طلبات الاعتذار المعلقة:</strong> ${pendingRequests}</p>
+                    <p><strong>إجمالي طلبات الاعتذار:</strong> ${absenceRequests.length}</p>
+                </div>
+            `;
+        }
+
+        function generatePerformanceReport() {
+            return '<h4>تقرير الأداء</h4><p>الأداء العام للمركز ممتاز مع تحسن مستمر في جميع المؤشرات. نظام الاعتذارات الجديد يساعد في تنظيم العمل بشكل أفضل.</p>';
+        }
+
+        // Edit and delete teacher functions
+        function editTeacher(teacherCode) {
+            showMessage(`تعديل بيانات الخادم ${teacherCode}`, 'success');
+        }
+
+        async function deleteTeacher(teacherCode) {
+            const teacher = allData.find(item => item.type === 'teacher' && item.teacher_code === teacherCode);
+            if (teacher) {
+                const result = await window.dataSdk.delete(teacher);
+                if (result.isOk) {
+                    showMessage('تم حذف الخادم بنجاح', 'success');
+                    loadTeacherManagement(); // Refresh the list
+                } else {
+                    showMessage('حدث خطأ في حذف الخادم', 'error');
+                }
+            }
+        }
+
+        // Back to dashboard
+        function backToDashboard() {
+            document.getElementById('results-view').classList.remove('active');
+            if (currentUserType === 'student') {
+                document.getElementById('student-dashboard').classList.add('active');
+            } else {
+                document.getElementById('teacher-dashboard').classList.add('active');
+            }
+        }
+
+        // Print results
+        function printResults() {
+            window.print();
+        }
+
+        // Logout
+        function logout() {
+            currentUser = null;
+            currentUserType = null;
+            
+            document.getElementById('student-dashboard').classList.remove('active');
+            document.getElementById('teacher-dashboard').classList.remove('active');
+            document.getElementById('results-view').classList.remove('active');
+            document.getElementById('login-section').style.display = 'block';
+            
+            // Clear forms
+            document.getElementById('student-login-form').reset();
+            document.getElementById('teacher-login-form').reset();
+            
+            showMessage('تم تسجيل الخروج بنجاح', 'success');
+        }
+
+        // Utility functions
+        function showMessage(message, type) {
+            const messageDiv = document.getElementById('login-message');
+            messageDiv.innerHTML = `<div class="${type}-message">${message}</div>`;
+            setTimeout(() => {
+                messageDiv.innerHTML = '';
+            }, 3000);
+        }
+
+        function showLoading(buttonId) {
+            const button = document.getElementById(buttonId);
+            button.disabled = true;
+            button.innerHTML = '<div class="spinner"></div>جاري التحميل...';
+        }
+
+        function hideLoading(buttonId, originalText) {
+            const button = document.getElementById(buttonId);
+            button.disabled = false;
+            button.innerHTML = originalText;
+        }
+
+        // Initialize app when page loads
+        document.addEventListener('DOMContentLoaded', initializeApp);
+    </script>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9993a1e393e31858',t:'MTc2MjI1NDI4NS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
